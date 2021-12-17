@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cleanin/screens/settings_screen.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({Key? key}) : super(key: key);
@@ -8,8 +9,8 @@ class SideMenu extends StatelessWidget {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
-        children: const [
-          DrawerHeader(
+        children: [
+          const DrawerHeader(
             child: Text(
               'cleanin settings',
               style: TextStyle(
@@ -19,17 +20,20 @@ class SideMenu extends StatelessWidget {
             ),
             decoration: BoxDecoration(color: Colors.blue),
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.message),
             title: Text('Messages'),
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.account_circle),
             title: Text('Profile'),
           ),
           ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen()));
+            },
           ),
         ],
       ),
