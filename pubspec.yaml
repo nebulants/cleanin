@@ -38,6 +38,8 @@ dependencies:
   table_calendar: ^3.0.3
   settings_ui: ^1.0.0
   google_sign_in: ^5.2.1
+  firebase_auth: ^3.3.4
+  firebase_core: ^1.10.6
 
 dev_dependencies:
   flutter_test:
