@@ -1,5 +1,6 @@
 import 'package:cleanin/screens/components/table_calendar_basic.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class HomeContainerScreen extends StatefulWidget {
   const HomeContainerScreen({Key? key}) : super(key: key);
@@ -8,9 +9,57 @@ class HomeContainerScreen extends StatefulWidget {
   State createState() => _HomeContainerScreen();
 }
 
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  scopes: <String>[
+    //'email',
+    //'https://www.googleapis.com/auth/contacts.readonly',
+    'https://www.googleapis.com/auth/calendar.readonly',
+    'https://www.googleapis.com/auth/calendar.events.readonly'
+  ],
+);
+
 class _HomeContainerScreen extends State<HomeContainerScreen> {
   final List<Widget> _homeContainerViews = [
-    const Center(child: Text("Index 0")),
+    Center(
+      child: ListView(
+        children: [
+          Center(
+            child: TextButton(
+              style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.blue)
+              ),
+              onPressed: () {
+                try {
+                  _googleSignIn.signIn();
+                  print("sign in successful");
+                } catch (error) {
+                  print(error);
+                }
+              },
+              child: Text('SIGN IN'),
+            ),
+          ),
+          Center(
+            child: TextButton(
+              style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.blue)
+              ),
+              onPressed: () {
+                try {
+                  _googleSignIn.disconnect();
+                  print("sign out successful");
+                } catch (error) {
+                  print(error);
+                }
+              },
+              child: Text('SIGN OUT'),
+            ),
+          ),
+        ],
+      ),
+    ),
     const TableBasicsExample(),
   ];
   int _currentIndex = 0;
