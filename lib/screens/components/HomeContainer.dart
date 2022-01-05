@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cleanin/screens/home_container_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class HomeContainer extends StatefulWidget {
   const HomeContainer({Key? key}) : super(key: key);
@@ -10,15 +11,24 @@ class HomeContainer extends StatefulWidget {
   State<StatefulWidget> createState() => _HomeContainerState();
 }
 
+DatabaseReference ref = FirebaseDatabase.instance.ref("test");
+
+// Get the Stream
+Stream<DatabaseEvent> stream = ref.onValue;
+
 class _HomeContainerState extends State<HomeContainer> with AutomaticKeepAliveClientMixin{
-  bool isClean = true;
+  bool _isClean = true;
 
   @override
   bool get wantKeepAlive => true;
 
+  _HomeContainerState() {
+    startListening();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return InkWell (
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeContainerScreen()));
       },
@@ -27,7 +37,7 @@ class _HomeContainerState extends State<HomeContainer> with AutomaticKeepAliveCl
         alignment: Alignment.center,
         margin: const EdgeInsets.all(5.0),
         decoration: BoxDecoration(
-          color: isClean ? Colors.green : Colors.amber,
+          color: _isClean ? Colors.green : Colors.amber,
           borderRadius: const BorderRadius.all(Radius.circular(10)),
 
         ),
@@ -35,7 +45,7 @@ class _HomeContainerState extends State<HomeContainer> with AutomaticKeepAliveCl
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: isClean ? Icon(Icons.check) : Icon(Icons.cleaning_services),
+              leading: _isClean ? Icon(Icons.check) : Icon(Icons.cleaning_services),
               title: Text('The Enchanted Nightingale'),
               subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
             ),
@@ -46,9 +56,9 @@ class _HomeContainerState extends State<HomeContainer> with AutomaticKeepAliveCl
                 TextButton(
                   child: const Text('TOOGLE CLEANING STATE'),
                   style: TextButton.styleFrom(primary: Colors.white),
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
-                      isClean = !isClean;
+                      toggleReference();
                     });
                   },
                 ),
@@ -59,6 +69,29 @@ class _HomeContainerState extends State<HomeContainer> with AutomaticKeepAliveCl
         ),
       )
     );
+  }
+
+  startListening() async {
+    // Subscribe to the stream!
+    stream.listen((DatabaseEvent event) {
+      print('Event Type: ${event.type}'); // DatabaseEventType.value;
+      print('Snapshot: ${event.snapshot.value}'); // DataSnapshot
+      setState(() {
+        _isClean = event.snapshot.value as bool;
+      });
+    });
+  }
+
+  setReference(value) async {
+    await ref.set(value);
+  }
+
+  toggleReference() async {
+    DatabaseEvent event = await ref.once();
+    var value = event.snapshot.value as bool;
+    _isClean = !value;
+    //print("isClean -> ${_isClean}");
+    await ref.set(_isClean);
   }
 
 }
