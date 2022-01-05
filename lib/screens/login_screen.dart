@@ -28,6 +28,8 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text("LOG OUT"),
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
+                GoogleSignIn _googleSignIn = GoogleSignIn();
+                await _googleSignIn.signOut();
               },
             )
           ]
