@@ -1,3 +1,4 @@
+import 'package:cleanin/auth_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:cleanin/screens/main_screen.dart';
 import 'package:calendar_view/calendar_view.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const MainScreen(),
+        home: const AuthGate(),
       )
     );
   }
