@@ -20,7 +20,7 @@ class _AddHomeFormState extends State<AddHomeForm> {
         address: _formKey.currentState!.value["address"],
         description: _formKey.currentState!.value["description"],
         nextCheckIn: DateTime.now(),
-        cleaningState: _formKey.currentState!.value["cleaningState"],
+        homeState: _formKey.currentState!.value["homeState"],
         icalPermalink: _formKey.currentState!.value["icalPermalink"]
     );
     FirebaseFirestore.instance.collection("homes").add(home.toMap());
@@ -65,10 +65,26 @@ class _AddHomeFormState extends State<AddHomeForm> {
                     FormBuilderValidators.required(context)
                   ]),
                 ),
-                FormBuilderSwitch(
-                  title: const Text('Is the house currently clean?'),
-                  name: 'cleaningState',
-                  initialValue: true,
+                FormBuilderDropdown(
+                  name: 'homeState',
+                  decoration: const InputDecoration(labelText: 'Current home state'),
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(context)
+                    ]),
+                  items: const [
+                    DropdownMenuItem(
+                      child: Text("clean"),
+                      value: 'clean',
+                    ),
+                    DropdownMenuItem(
+                      child: Text("dirty"),
+                      value: 'dirty',
+                    ),
+                    DropdownMenuItem(
+                      child: Text("occupied"),
+                      value: 'occupied',
+                    ),
+                  ]
                 ),
                 Row(
                   children: <Widget>[

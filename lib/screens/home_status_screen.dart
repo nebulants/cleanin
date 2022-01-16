@@ -38,17 +38,20 @@ class _HomeStatusScreenState extends State<HomeStatusScreen> {
                   : const Center(child: CircularProgressIndicator());
             },
           ),
-          FutureBuilder(
-            future: widget.reference.get().then((value) => value.data()?.description),
-            builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-              if(snapshot.connectionState == ConnectionState.done) {
-                return Text(snapshot.data!);
-              }
-              else if(snapshot.connectionState == ConnectionState.none) {
-                return const Text("No data available");
-              }
-              return const Center(child: CircularProgressIndicator());
-            },
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FutureBuilder(
+              future: widget.reference.get().then((value) => value.data()?.description),
+              builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+                if(snapshot.connectionState == ConnectionState.done) {
+                  return Text(snapshot.data!);
+                }
+                else if(snapshot.connectionState == ConnectionState.none) {
+                  return const Text("No data available");
+                }
+                return const Center(child: CircularProgressIndicator());
+              },
+            ),
           )
         ],
       )

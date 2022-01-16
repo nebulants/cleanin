@@ -1,11 +1,19 @@
 
+import 'package:cleanin/screens/components/home_container.dart';
+
+enum HomeState {
+  clean,
+  dirty,
+  occupied
+}
+
 class Home
 {
   late String name;
   late String address;
   late String description;
   late DateTime nextCheckIn;
-  late bool cleaningState;
+  late String homeState;
   late String icalPermalink;
 
   Home({
@@ -13,7 +21,7 @@ class Home
     required this.address,
     required this.description,
     required this.nextCheckIn,
-    required this.cleaningState,
+    required this.homeState,
     required this.icalPermalink
   });
 
@@ -23,7 +31,7 @@ class Home
     address = data["address"] as String;
     description = data["description"] as String;
     nextCheckIn = data["nextCheckIn"].toDate() as DateTime;
-    cleaningState = data["cleaningState"] as bool;
+    homeState = data["homeState"] as String;
     icalPermalink = data["icalPermalink"] as String;
   }
 
@@ -33,7 +41,7 @@ class Home
       "address" : address,
       "description" : description,
       "nextCheckIn" : nextCheckIn,
-      "cleaningState" : cleaningState,
+      "homeState" : homeState,
       "icalPermalink" : icalPermalink,
     };
   }

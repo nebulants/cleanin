@@ -20,7 +20,8 @@ final homesRef = FirebaseFirestore.instance
 );
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  String _orderBy = 'cleaningState';
+  String _orderBy = 'nextCheckIn';
+  DisplayMode _displayMode = DisplayMode.normal;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
         actions: <Widget>[
+          IconButton(
+            icon: _displayMode == DisplayMode.normal
+                ? const Icon(Icons.view_carousel_outlined)
+                : const Icon(Icons.view_agenda_outlined),
+            onPressed: () {
+              setState(() {
+                _displayMode = _displayMode == DisplayMode.normal
+                ? DisplayMode.withMedia
+                : DisplayMode.normal;
+              });
+            },
+          ),
           PopupMenuButton(
             icon: const Icon(Icons.sort),
             onSelected: (value) => setState(() {
@@ -50,7 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               return [
                 const PopupMenuItem(
                   child: Text('Sort by cleaning state'),
-                  value: 'cleaningState'
+                  value: 'homeState'
                 ),
                 const PopupMenuItem(
                   child: Text('Sort by closest check-in'),
@@ -88,7 +101,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               itemBuilder: (context, index) {
                 return HomeContainer(
                     home: data.docs[index].data() as Home,
-                    reference: data.docs[index].reference as DocumentReference<Home>
+                    reference: data.docs[index].reference as DocumentReference<Home>,
+                    displayMode: _displayMode,
                 );
               },
             );

@@ -6,6 +6,9 @@ import 'package:icalendar_parser/icalendar_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:mutex/mutex.dart';
+
+Mutex m = Mutex();
 
 class CalendarParser {
   late ICalendar calendar;
@@ -13,7 +16,7 @@ class CalendarParser {
   Future<List<Meeting>> getCalendarEntries(String sourceUrl) async {
     try {
       Uri url = Uri.parse(sourceUrl);
-      final http.Response responseData = await http.get(url);
+      final http.Response responseData = await m.protect(() => http.get(url));
       var responseBytes = responseData.bodyBytes.buffer.asUint8List(
           responseData.bodyBytes.offsetInBytes,
           responseData.bodyBytes.lengthInBytes
@@ -26,12 +29,7 @@ class CalendarParser {
 
       calendar = ICalendar.fromLines(lines);
 
-      // print(calendar.data.map((e) => e['summary'].toString()));
-      // print(calendar.data.map((e) => e['dtstart'].toDateTime()));
-      // print(calendar.data.map((e) => e['dtend'].toDateTime()));
-
-      final DateTime startTime = calendar.data.map((e) => e['dtstart'].toDateTime()).first;
-      final DateTime endTime = calendar.data.map((e) => e['dtend'].toDateTime()).first;
+      if(calendar.data.isEmpty) return [];
 
       final List<Meeting> meetings = <Meeting>[];
       // ((type, dtend, dtstart, uid, summary))

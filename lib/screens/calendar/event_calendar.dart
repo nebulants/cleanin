@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:cleanin/utils/calendar_parser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cleanin/models/home.dart';
+import 'package:cleanin/screens/calendar/event_synchronizer.dart';
 
 class CalendarScreen extends StatefulWidget {
   /// Creates the home page to display the calendar widget.
@@ -13,40 +13,18 @@ class CalendarScreen extends StatefulWidget {
   final DocumentReference<Home> reference;
 
   @override
-  // ignore: library_private_types_in_public_api
   _CalendarScreenState createState() => _CalendarScreenState();
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
   List<Meeting> _dataSource = <Meeting>[];
-  late CalendarParser _calendarParser;
 
   @override
   void initState() {
     super.initState();
-    _calendarParser = CalendarParser();
-    getCalendarEntries().then((value) => setState(() {
+    EventSynchronizer(reference: widget.reference).getCalendarEntries().then((value) => setState(() {
       _dataSource = value;
     }));
-  }
-
-  Future<List<Meeting>> getCalendarEntries() async {
-
-    Home home = await widget.reference.get().then((value) => value.data()!);
-
-    List<Meeting> meetings = await _calendarParser.getCalendarEntries(home.icalPermalink);
-
-    meetings.sort((a, b) => a.from.compareTo(b.from));
-
-    var filtered = meetings.where((e) => e.from.isAfter(DateTime.now()));
-
-    print(filtered.map((e) => e.from));
-
-    home.nextCheckIn = filtered.first.from;
-
-    await widget.reference.update(home.toMap());
-
-    return meetings;
   }
 
   @override
@@ -57,10 +35,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
           actions: [
             IconButton(
               onPressed: () async {
-                List<Meeting> tempMeetings = await getCalendarEntries();
-                setState(() {
-                  _dataSource = tempMeetings;
-                });
+                EventSynchronizer(reference: widget.reference).getCalendarEntries().then((value) => setState(() {
+                  _dataSource = value;
+                }));
               },
               icon: const Icon(Icons.sync),
             )
