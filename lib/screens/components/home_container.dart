@@ -35,12 +35,6 @@ const Map<HomeState, dynamic> homeStateIcon = {
   HomeState.occupied : Icon(Icons.people_sharp, size: 40.0)
 };
 
-const List<String> homeState = [
-  "clean",
-  "dirty",
-  "occupied"
-];
-
 class _HomeContainerState extends State<HomeContainer> with AutomaticKeepAliveClientMixin{
 
   HomeState _homeState = HomeState.clean;
@@ -94,7 +88,7 @@ class _HomeContainerState extends State<HomeContainer> with AutomaticKeepAliveCl
     );
   }
 
-  Widget homeContainerWithPictures() {
+  Widget homeContainerWithPictures(String imageUrl) {
     return Container(
         key: UniqueKey(),
         alignment: Alignment.center,
@@ -109,7 +103,7 @@ class _HomeContainerState extends State<HomeContainer> with AutomaticKeepAliveCl
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Image.network(
-                'https://media.istockphoto.com/photos/bohemian-living-room-interior-3d-render-picture-id1182454657?k=20&m=1182454657&s=612x612&w=0&h=1xEsm7BqeicA8jYk9KlerUtGsAgzzo530l5Ak1HJdnc=',
+                imageUrl,
                 loadingBuilder: (context, child, loadingProgress) {
                   return loadingProgress == null
                       ? child
@@ -150,7 +144,7 @@ class _HomeContainerState extends State<HomeContainer> with AutomaticKeepAliveCl
       },
       child: StreamBuilder(
         stream: widget.reference.snapshots(),
-        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        builder: (context, AsyncSnapshot<DocumentSnapshot<Home>> snapshot) {
           if(snapshot.hasError) {
             return Center(
               child: Text(snapshot.error.toString()),
@@ -174,7 +168,7 @@ class _HomeContainerState extends State<HomeContainer> with AutomaticKeepAliveCl
           }
 
           if(widget.displayMode == DisplayMode.withMedia) {
-            return homeContainerWithPictures();
+            return homeContainerWithPictures(data.data()!.imageUrl);
           }
           return simpleHomeContainer();
         },

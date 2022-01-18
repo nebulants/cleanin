@@ -21,8 +21,8 @@ class _HomeContainerScreenState extends State<HomeContainerScreen> {
   void initState() {
     super.initState();
     _homeContainerViews = [
-      CalendarScreen(reference: widget.reference),
       HomeStatusScreen(reference: widget.reference),
+      CalendarScreen(reference: widget.reference),
     ];
   }
 
@@ -37,12 +37,12 @@ class _HomeContainerScreenState extends State<HomeContainerScreen> {
         }),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
-              label: "calendar"
-          ),
-          BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: "home"
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today),
+              label: "calendar"
           ),
         ],
       ),

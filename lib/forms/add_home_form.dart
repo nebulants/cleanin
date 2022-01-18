@@ -21,7 +21,8 @@ class _AddHomeFormState extends State<AddHomeForm> {
         description: _formKey.currentState!.value["description"],
         nextCheckIn: DateTime.now(),
         homeState: _formKey.currentState!.value["homeState"],
-        icalPermalink: _formKey.currentState!.value["icalPermalink"]
+        icalPermalink: _formKey.currentState!.value["icalPermalink"],
+        imageUrl: ''
     );
     FirebaseFirestore.instance.collection("homes").add(home.toMap());
   }

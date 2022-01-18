@@ -30,15 +30,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: Column(
           children: const [
             Center(child: Text("CleanIn Dashboard")),
-            // StreamBuilder(
-            //   stream: FirebaseFirestore.instance.snapshotsInSync(),
-            //   builder: (context, _) {
-            //     return Text(
-            //       'Latest Snapshot: ${DateTime.now()}',
-            //       style: Theme.of(context).textTheme.caption,
-            //     );
-            //   },
-            // )
           ],
         ),
         actions: <Widget>[

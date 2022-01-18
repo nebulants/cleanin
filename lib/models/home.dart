@@ -3,8 +3,8 @@ import 'package:cleanin/screens/components/home_container.dart';
 
 enum HomeState {
   clean,
-  dirty,
-  occupied
+  occupied,
+  dirty
 }
 
 class Home
@@ -15,6 +15,7 @@ class Home
   late DateTime nextCheckIn;
   late String homeState;
   late String icalPermalink;
+  late String imageUrl;
 
   Home({
     required this.name,
@@ -22,7 +23,8 @@ class Home
     required this.description,
     required this.nextCheckIn,
     required this.homeState,
-    required this.icalPermalink
+    required this.icalPermalink,
+    required this.imageUrl
   });
 
 
@@ -33,6 +35,7 @@ class Home
     nextCheckIn = data["nextCheckIn"].toDate() as DateTime;
     homeState = data["homeState"] as String;
     icalPermalink = data["icalPermalink"] as String;
+    imageUrl = data["imageUrl"] as String;
   }
 
   Map<String, dynamic> toMap() {
@@ -43,6 +46,7 @@ class Home
       "nextCheckIn" : nextCheckIn,
       "homeState" : homeState,
       "icalPermalink" : icalPermalink,
+      "imageUrl" : imageUrl,
     };
   }
 }
